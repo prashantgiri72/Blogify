@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { createHmac, randomBytes } = require("crypto");
-const { createTokenForUser } = require("../services/authentication");
+const { createTokenForUser } = require("../services-temp/authentication");
 
 const userSchema = new mongoose.Schema(
   {
@@ -41,7 +41,7 @@ userSchema.pre("save", function (next) {
   const hashedPassword = createHmac("sha256", salt)
     .update(user.password)
     .digest("hex");
-  
+
   // --- DEBUG LOGS FOR SIGNUP ---
   console.log("\n--- SIGNUP PROCESS ---");
   console.log("Original Password:", user.password);

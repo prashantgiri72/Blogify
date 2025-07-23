@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const User = require("../models/user");
-const upload = require("../services/cloudinary");
-const { createTokenForUser } = require("../services/authentication");
+const upload = require("../services-temp/cloudinary");
+const { createTokenForUser } = require("../services-temp/authentication");
 
 const router = Router();
 

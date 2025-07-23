@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm navbar-deep-space">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><i class="bi bi-journal-richtext"></i> Blogify</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto">
+        <% if (locals.user) { %>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img src="<%= locals.user.profileImageURL %>" width="30" height="30" class="rounded-circle me-2" />
+            <%= locals.user.fullName %>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/user/profile">My Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+          </ul>
+        </li>
+        <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Create Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signin">Signin</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<% if (locals.error) { %>
+<div class="container mt-4">
+  <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+</div>
+<% } %>

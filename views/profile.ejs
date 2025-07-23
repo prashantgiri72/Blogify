@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>My Profile</title>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h1 class="card-title">My Profile</h1>
+              <img
+                src="<%= user.profileImageURL %>"
+                width="150"
+                height="150"
+                class="rounded-circle my-3"
+                alt="Profile Picture"
+              />
+              <h4 class="card-subtitle mb-2 text-muted"><%= user.fullName %></h4>
+              <p class="card-text"><%= user.email %></p>
+
+              <hr>
+
+              <h5 class="mt-4">Update Profile Picture</h5>
+              <form action="/user/profile" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <input
+                    type="file"
+                    class="form-control"
+                    name="profileImage"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary">Upload <i class="bi bi-upload"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+    <%- include('./partials/script.ejs') %>
+  </body>
+</html>

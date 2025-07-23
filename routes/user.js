@@ -1,23 +1,9 @@
 const { Router } = require("express");
-const multer = require("multer");
-const path = require("path");
 const User = require("../models/user");
-const { createTokenForUser } = require("../Services/Authentication");
+const upload = require("../services/cloudinary");
+const { createTokenForUser } = require("../services/authentication");
 
 const router = Router();
-
-// Multer storage configuration for profile pictures
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(`./public/images/profiles/`));
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
-  },
-});
-
-const upload = multer({ storage: storage });
 
 router.get("/signin", (req, res) => {
   return res.render("signin");
@@ -68,13 +54,12 @@ router.post("/profile", upload.single("profileImage"), async (req, res) => {
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
-      profileImageURL: `/images/profiles/${req.file.filename}`,
+      profileImageURL: req.file.path,
     },
     { new: true }
   );
 
   const token = createTokenForUser(user);
-
   return res.cookie("token", token).redirect("/user/profile");
 });
 

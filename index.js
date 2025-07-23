@@ -1,6 +1,4 @@
-// This MUST be the first line of your file
 require('dotenv').config();
-
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -15,9 +13,9 @@ const {
 } = require("./middlewares/authentication");
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-// This line now correctly uses the variable loaded from .env
+console.log("Attempting to connect to:", process.env.MONGO_URL);
 mongoose
   .connect(process.env.MONGO_URL)
   .then((e) => console.log("MongoDB Connected"));
@@ -31,7 +29,7 @@ app.use(checkForAuthenticationCookie("token"));
 app.use(express.static(path.resolve("./public")));
 
 app.get("/", async (req, res) => {
-  const allBlogs = await Blog.find({}).populate("createdBy");
+  const allBlogs = await Blog.find({}).sort({ createdAt: -1 }).populate("createdBy");
   res.render("home", {
     user: req.user,
     blogs: allBlogs,
@@ -40,6 +38,7 @@ app.get("/", async (req, res) => {
 
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
+
 if (require.main === module) {
   app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
 }

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { createHmac, randomBytes } = require("crypto");
-const { createTokenForUser } = require("../Services/Authentication");
+const { createTokenForUser } = require("../services/authentication");
 
 const userSchema = new mongoose.Schema(
   {
@@ -41,6 +41,13 @@ userSchema.pre("save", function (next) {
   const hashedPassword = createHmac("sha256", salt)
     .update(user.password)
     .digest("hex");
+  
+  // --- DEBUG LOGS FOR SIGNUP ---
+  console.log("\n--- SIGNUP PROCESS ---");
+  console.log("Original Password:", user.password);
+  console.log("Salt Generated:", salt);
+  console.log("Hashed Password to be Saved:", hashedPassword);
+  // -------------------------
 
   this.salt = salt;
   this.password = hashedPassword;
@@ -60,6 +67,14 @@ userSchema.static(
     const userProvidedHash = createHmac("sha256", salt)
       .update(password)
       .digest("hex");
+
+    // --- DEBUG LOGS FOR LOGIN ---
+    console.log("\n--- LOGIN ATTEMPT ---");
+    console.log("Password Provided by User:", password);
+    console.log("Salt from Database:", salt);
+    console.log("Hash from Database:", hashedPassword);
+    console.log("Hash Generated from Provided Password:", userProvidedHash);
+    // -------------------------
 
     if (hashedPassword !== userProvidedHash) {
       throw new Error("Incorrect Password");
